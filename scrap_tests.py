@@ -28,7 +28,7 @@ class ScrapTests(unittest.TestCase):
         # assert the status code of the response
         self.assertEqual(result.status_code, 200) 
 
-    def test_home_data(self):
+    def test_home_data_count(self):
         # sends HTTP GET request to the application
         # on the specified path
         result = self.app.get('/fetch_from_google', query_string=dict(query='google')) 
@@ -37,3 +37,53 @@ class ScrapTests(unittest.TestCase):
         response_count = len(obj)
         # assert the response data
         self.assertEqual(response_count, 5)
+
+    def test_home_data_count_for_rare_case(self):
+        # sends HTTP GET request to the application
+        # on the specified path
+        result = self.app.get('/fetch_from_google', query_string=dict(query='zxczxccvbmvcsadfasdasdasd')) 
+        str_response = result.data.decode('utf-8')
+        obj = json.loads(str_response)
+        response_count = len(obj)
+        # assert the response data
+        self.assertEqual(response_count, 1)
+
+    def test_home_data_count_for_null_case(self):
+        # sends HTTP GET request to the application
+        # on the specified path
+        result = self.app.get('/fetch_from_google', query_string=dict(query='')) 
+        str_response = result.data.decode('utf-8')
+        obj = json.loads(str_response)
+        response_count = len(obj)
+        # assert the response data
+        self.assertEqual(response_count, 1)
+
+    def test_home_data_count_for_blank_case(self):
+        # sends HTTP GET request to the application
+        # on the specified path
+        result = self.app.get('/fetch_from_google', query_string=dict(query='   ')) 
+        str_response = result.data.decode('utf-8')
+        obj = json.loads(str_response)
+        response_count = len(obj)
+        # assert the response data
+        self.assertEqual(response_count, 1)
+
+    def test_home_data_class(self):
+        # sends HTTP GET request to the application
+        # on the specified path
+        result = self.app.get('/fetch_from_google', query_string=dict(query='   ')) 
+        str_response = result.data.decode('utf-8')
+        obj = json.loads(str_response)
+        response_class = type(obj)
+        # assert the response data
+        self.assertEqual(response_class.__name__, "list")
+
+    def test_home_data_for_unicode(self):
+        # sends HTTP GET request to the application
+        # on the specified path
+        result = self.app.get('/fetch_from_google', query_string=dict(query='global blue')) 
+        str_response = result.data.decode('utf-8')
+        obj = json.loads(str_response)
+        response_class = type(obj)
+        # assert the response data
+        self.assertEqual(response_class.__name__, "list")

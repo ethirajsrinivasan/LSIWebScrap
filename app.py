@@ -4,8 +4,6 @@ import requests
 from nltk import word_tokenize, FreqDist
 import string
 from nltk.corpus import stopwords
-import wordcloud
-from wordcloud import WordCloud, ImageColorGenerator
 import matplotlib.pyplot as plt
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -21,6 +19,8 @@ def fetch_from_google():
     search = request.args.get('query')
     url = google_url + search
     documents = scrap_data(url)
+    if len(documents) == 0:
+        return jsonify(["No Message found"])
     sims, dictionary, tf_idf = get_similarites(documents)
     query_tf_idf = get_query_doc_tf_idf(search, dictionary, tf_idf)
     messages = get_similar_docs(sims, query_tf_idf, documents)
