@@ -1,4 +1,4 @@
-from app import app
+from web_scrapper_controller import *
 import unittest 
 import json
 class ScrapTests(unittest.TestCase): 
